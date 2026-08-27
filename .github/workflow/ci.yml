@@ -1,0 +1,19 @@
+name: CI
+
+permissions:
+  contents: read
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v7
+
+      - name: Check YAML syntax
+        run: yq products.d/sles_nvidia_161.yaml
+
+      - name: Check CSS syntax
+        run: npx csstree-validator@latest branding/*.css

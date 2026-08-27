@@ -1,0 +1,156 @@
+/*
+ * Brand appearance: NVIDIA (proof of concept).
+ *
+ * Install as assets/appearance/brand.css on the medium. It restyles every
+ * product and the product selection screen; a product appearance still wins
+ * role by role. No logo here: logos belong to products.
+ *
+ * NVIDIA has no relationship to Agama. This file is an exercise: a brand that
+ * diverges hard from the Agama defaults (one saturated green, black labels,
+ * square corners, a natively dark look) used to see how much of that the role
+ * set absorbs without reaching past it.
+ *
+ * Every color below is a token read from nvidia.com's own stylesheet
+ * (clientlib-site.min.css, its --color-<hue>-<step> ramp), or, where a token
+ * failed a contrast pair, the same-hue shade check-contrast.js suggested for
+ * it. The ramp steps used here:
+ *
+ *   green   300 #76b900  100 #bff230  500 #3f8500  700 #265600
+ *   gray    025 #f7f7f7  100 #e0e0e0  300 #a7a7a7  400 #898989
+ *           500 #757575  600 #636363  800 #2d2d2d  900 #222222  950 #161616
+ *   red     300 #ff8181  700 #961515
+ *   yellow  100 #fcde7b  400 #df6500
+ *   teal    300 #1dbba4  500 #0d8473
+ *   blue    200 #7cd7fe  700 #0046a4
+ *   purple  400 #c359ef  700 #741d9d
+ *
+ * Every pair was measured with web/scripts/check-contrast.js against WCAG AA
+ * (4.5:1 text, 3:1 non-text), in both color schemes separately.
+ */
+
+/* NVIDIA Sans cannot be used: it is proprietary and its own metadata says "Not
+   for distribution or release". Rubik is the closest libre stand-in meanwhile:
+   same cap height, letter widths within about 2%. */
+@font-face {
+  font-family: Rubik;
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("./fonts/Rubik-VariableFont_wght.woff2") format("woff2");
+}
+
+:root {
+  /* Square everything. The site puts border-radius: 0 on its controls and has
+     no small-radius rule on any button class, so this is the master role rather
+     than a per-tier one: buttons, inputs, cards, popovers and dialogs all go
+     square, and PF's pill radius follows the small tier with them. */
+  --agm-t--border-radius: 0;
+
+  /* Body and headings only: there is no brand monospace, so code and device
+     names keep SUSE Mono. Agama's own families stay behind Rubik, which has no
+     Greek: those glyphs fall back per glyph, and Agama already assigns
+     Cyrillic, Georgian and CJK per language (see base/_i18n.scss).
+
+     No size-adjust: Rubik and SUSE Text are both 1000 units per em with a cap
+     height of 0.700, so headings and buttons keep their measured size. Rubik
+     runs about 7% wider, so long strings are the thing to look at, not the size
+     scale. */
+  --agm-t--font--family--body: "Rubik", "SUSE Text", "Noto Sans", verdana;
+  --agm-t--font--family--heading: "Rubik", "SUSE Display", "Noto Sans", verdana;
+
+  /* Rubik's variable range covers all three, so nothing is synthesized. */
+  --agm-t--font--weight--body: 400;
+  --agm-t--font--weight--heading: 500;
+  --agm-t--font--weight--bold: 700;
+}
+
+/* Light scheme. Its own premise, not the dark one inverted: paper, black text,
+   the brand green kept verbatim as a fill with the black label the site
+   actually uses (8.71:1). Green fails as text on white (2.41:1), so text, links
+   and focus take green-500 and a nudge of it. */
+:root:where(:not(.pf-v6-theme-dark)) {
+  --agm-t--surface--color: #fff;
+  --agm-t--surface--color--raised: #f7f7f7;
+  --agm-t--surface--color--floating: #fff;
+  --agm-t--text--color: #1a1a1a;
+  --agm-t--text--color--subtle: #636363;
+  --agm-t--text--color--disabled: #616161;
+  /* Icons in the accent, the link shade rather than the fill green: they sit
+     next to the green section headings, and the fill green is 2.41:1 on white. */
+  --agm-t--icon--color: #3b7b00;
+  --agm-t--border--color: #898989;
+
+  --agm-t--brand--color: #76b900;
+  /* The site's own button hover, lighter rather than darker. */
+  --agm-t--brand--color--hover: #91c733;
+  --agm-t--brand--color--clicked: #3f8500;
+  --agm-t--brand--text--color: #000;
+  --agm-t--link--color: #3b7b00;
+  /* Not from the ramp: a pale green tint, lighter than the raised surface so
+     everything that lands on a hovered or selected row still clears 4.5:1. */
+  --agm-t--action--background--color--hover: #f1f8e0;
+  --agm-t--focus--color: #3f8500;
+  /* Black hairline: white would clear the ring (4.60:1) but not the green fill
+     it sits on (2.41:1), which is the case the hairline exists for. */
+  --agm-t--focus--separator--color: #000;
+
+  --agm-t--disabled--background--color: #e0e0e0;
+  --agm-t--tooltip--background--color: #000;
+  --agm-t--tooltip--color: #fff;
+
+  --agm-t--status--info--color: #0046a4;
+  --agm-t--status--caution--color: #b55300;
+  --agm-t--status--danger--color: #961515;
+  --agm-t--status--success--color: #0c7869;
+  --agm-t--status--custom--color: #741d9d;
+}
+
+/* Dark scheme: the brand's native look, on the site's own neutral gray ramp.
+   The green carries text here (7.68:1 on the page), so brand, link and focus
+   are all the published color. */
+:root:where(.pf-v6-theme-dark) {
+  --agm-t--surface--color: #161616;
+  --agm-t--surface--color--raised: #222;
+  --agm-t--surface--color--floating: #313131;
+  --agm-t--text--color: #f7f7f7;
+  --agm-t--text--color--subtle: #a7a7a7;
+  --agm-t--text--color--disabled: #949494;
+  --agm-t--icon--color: #76b900;
+  /* Light enough to clear 3:1 on all three surfaces: with elevation this
+     compressed, the border carries the edges. */
+  --agm-t--border--color: #7a7a7a;
+
+  --agm-t--brand--color: #76b900;
+  --agm-t--brand--color--hover: #bff230;
+  --agm-t--brand--color--clicked: #76b900;
+  --agm-t--brand--text--color: #000;
+  --agm-t--link--color: #76b900;
+  --agm-t--action--background--color--hover: #2d2d2d;
+  --agm-t--focus--color: #76b900;
+  --agm-t--focus--separator--color: #161616;
+
+  --agm-t--disabled--background--color: #2d2d2d;
+  /* Inverted rather than elevated: near-white with dark text, so a tooltip
+     separates from a page this dark without leaning on its shadow. */
+  --agm-t--tooltip--background--color: #f7f7f7;
+  --agm-t--tooltip--color: #161616;
+
+  --agm-t--status--info--color: #7cd7fe;
+  /* yellow-100 rather than the site's #ef9100: that orange collapses onto the
+     brand green under deuteranopia (dE 6.9), this step does not. */
+  --agm-t--status--caution--color: #fcde7b;
+  --agm-t--status--danger--color: #ff8181;
+  --agm-t--status--success--color: #1dbba4;
+  --agm-t--status--custom--color: #cc73f1;
+}
+
+/* High contrast: the accent only, per variant. PatternFly governs the rest. */
+:root:where(.pf-v6-theme-high-contrast:not(.pf-v6-theme-dark)) {
+  --agm-t--brand--color: #265600;
+  --agm-t--link--color: #265600;
+}
+
+:root:where(.pf-v6-theme-dark.pf-v6-theme-high-contrast) {
+  --agm-t--brand--color: #bff230;
+  --agm-t--link--color: #bff230;
+}
