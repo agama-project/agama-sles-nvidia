@@ -24,17 +24,13 @@ Summary:        SLES for NVIDIA product definition and CSS branding for the Agam
 License:        GPL-2.0-only
 URL:            https://github.com/agama-project/agama-sles-nvidia
 BuildArch:      noarch
-Source0:        agama.tar
-
-# SLES for NVIDIA is aarch64 only
-ExclusiveArch:  aarch64
-
+Source0:        agama-sles-nvidia.tar
 
 %description
 Products definition for Agama installer.
 
 %prep
-%autosetup -a0 -n agama
+%autosetup -a0 -n agama-sles-nvidia
 
 %build
 
@@ -43,10 +39,10 @@ env \
   SRCDIR=. \
   DESTDIR=%{buildroot} \
   datadir=%{_datadir} \
-  %{_builddir}/agama/install.sh
+  %{_builddir}/agama-sles-nvidia/install.sh
 
 %package product
-Summary: Product definition for the Agama installer.
+Summary: Product definition for the Agama installer
 
 %description product
 Definition of the SLES for NVIDIA product for the Agama installer.
@@ -56,7 +52,7 @@ Definition of the SLES for NVIDIA product for the Agama installer.
 %license LICENSE
 %dir %{_datadir}/agama
 %dir %{_datadir}/agama/products.d
-%{_datadir}/agama/products.d/sles_nvidia_161.yaml
+%{_datadir}/agama/products.d/*.yaml
 
 %package branding
 License: GPL-2.0-only and OFL-1.1
@@ -66,7 +62,6 @@ Summary: Branding for the SLES for NVIDIA product
 Specific CSS branding for the Agama installer for the SLES for NVIDIA product.
 
 %files branding
-%files
 %doc README.md
 %license LICENSE
 %license branding/Rubik-OFL.txt

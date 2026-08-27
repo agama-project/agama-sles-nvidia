@@ -7,16 +7,16 @@
     <param name="scm">git</param>
     <!-- the revision might be changed to "release" branch or a git tag by the
     .github/workflows/obs-staging-shared.yml action when submitting to OBS -->
-    <param name="revision">main</param>
+    <param name="revision">initial-content</param>
     <param name="without-version">enable</param>
-    <param name="extract">agama-sles-nvidia.changes</param>
-    <param name="extract">agama-sles-nvidia.spec</param>
+    <param name="extract">package/agama-sles-nvidia.changes</param>
+    <param name="extract">package/agama-sles-nvidia.spec</param>
   </service>
   <service mode="buildtime" name="tar">
-    <param name="obsinfo">agama.obsinfo</param>
-    <param name="filename">agama</param>
+    <param name="obsinfo">agama-sles-nvidia.obsinfo</param>
+    <param name="filename">agama-sles-nvidia</param>
   </service>
   <service mode="buildtime" name="set_version">
-    <param name="basename">agama</param>
+    <param name="basename">agama-sles-nvidia</param>
   </service>
 </services>
