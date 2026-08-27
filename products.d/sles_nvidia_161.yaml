@@ -11,7 +11,8 @@ license: "license.final"
 # ------------------------------------------------------------------------------
 # Note: This is the same description as for the standard SLES, but because the
 # SLES for NVIDIA is the only product in the medium then the product selection
-# is not offered and the text is never displayed to the user.
+# is not offered and the text is never displayed to the user. Unfortunately we
+# cannot change it now because of the translations.
 description: "An open, reliable, compliant, and future-proof Linux Server choice
   that ensures the enterprise's business continuity. It is the secure and
   adaptable OS for long-term supported, innovation-ready infrastructure running
@@ -120,7 +121,7 @@ software:
   installation_labels:
     - label: S4NV161-arch64
       archs: aarch64
-
+  kernel: kernel-nvidia
   mandatory_patterns:
     - bootloader
     - enhanced_base
@@ -151,6 +152,7 @@ software:
     - print_server
   mandatory_packages:
     - SLES_NVIDIA-release
+    - kernel-firmware-nvidia
     - NetworkManager
     # bsc#1241224, bsc#1224868 avoid probe DHCP over all ethernet devices and ignore carrier
     - NetworkManager-config-server
