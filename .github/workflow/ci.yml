@@ -3,12 +3,7 @@ name: CI
 permissions:
   contents: read
 
-on:
-  push:
-  pull_request:
-
-  # allow running manually
-  workflow_dispatch:
+on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   ci:
