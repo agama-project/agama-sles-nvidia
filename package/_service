@@ -1,0 +1,22 @@
+<services>
+  <service name="obs_scm" mode="manual">
+    <!-- the URL is modified by the .github/workflows/obs-staging-shared.yml
+    action when submitting to OBS -->
+    <param name="url">https://github.com/agama-project/agama-sles-nvidia.git</param>
+    <param name="versionformat">16.1+%ct.%h</param>
+    <param name="scm">git</param>
+    <!-- the revision might be changed to "release" branch or a git tag by the
+    .github/workflows/obs-staging-shared.yml action when submitting to OBS -->
+    <param name="revision">main</param>
+    <param name="without-version">enable</param>
+    <param name="extract">agama-sles-nvidia.changes</param>
+    <param name="extract">agama-sles-nvidia.spec</param>
+  </service>
+  <service mode="buildtime" name="tar">
+    <param name="obsinfo">agama.obsinfo</param>
+    <param name="filename">agama</param>
+  </service>
+  <service mode="buildtime" name="set_version">
+    <param name="basename">agama</param>
+  </service>
+</services>
