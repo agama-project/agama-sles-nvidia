@@ -3,11 +3,12 @@
     <!-- the URL is modified by the .github/workflows/obs-staging-shared.yml
     action when submitting to OBS -->
     <param name="url">https://github.com/agama-project/agama-sles-nvidia.git</param>
+    <!-- use the Git commit time and the short commit hash in the package version -->
     <param name="versionformat">16.1+%ct.%h</param>
     <param name="scm">git</param>
     <!-- the revision might be changed to "release" branch or a git tag by the
     .github/workflows/obs-staging-shared.yml action when submitting to OBS -->
-    <param name="revision">initial-content</param>
+    <param name="revision">main</param>
     <param name="without-version">enable</param>
     <param name="extract">package/agama-sles-nvidia.changes</param>
     <param name="extract">package/agama-sles-nvidia.spec</param>
