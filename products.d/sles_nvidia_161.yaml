@@ -9,10 +9,8 @@ license: "license.final"
 # at the at translations/description key below to avoid using obsolete
 # translations!!
 # ------------------------------------------------------------------------------
-# Note: This is the same description as for the standard SLES, but because the
-# SLES for NVIDIA is the only product in the medium then the product selection
-# is not offered and the text is never displayed to the user. Unfortunately we
-# cannot change it now because of the translations.
+# Note: This is the same description as for the standard SLES, but because of
+# the translation freeze we cannot update it :-/
 description: "An open, reliable, compliant, and future-proof Linux Server choice
   that ensures the enterprise's business continuity. It is the secure and
   adaptable OS for long-term supported, innovation-ready infrastructure running
@@ -114,7 +112,55 @@ translations:
       服务器系统，旨在确保企业业务持续运作。作为安全和可适应的操作系统，它适用于本地、云端或边缘计算平台的关键业务工作负载，运行在需要长期支持、容许创新的基础设施之上。
     zh_TW: 一個開放、可靠、符合標準且具未來適應性的 Linux
       伺服器系統，能確保企業業務的持續運作。它是一個安全且具備適應力的作業系統，適用於受到長期支援、具備創新彈性並用於在內部、雲端與邊緣環境中執行關鍵業務工作負載的基礎架構。
-
+  mode:
+    standard:
+      name:
+        bg: Стандартен
+        ca: Estàndard
+        cs: Standardní
+        de: Standard
+        el: Τυπικό
+        es: Estándar
+        fi: Tavalinen
+        fr: Standard
+        id: Standar
+        it: Standard
+        ja: 標準
+        ka: სტანდარტული
+        kab: Tizeɣt
+        nb_NO: Standard
+        pl: Standardowy
+        pt_BR: Padrão
+        ru: Стандартная
+        sk: Štandardný
+        sv: Standard
+        tr: Standart
+        uk: Стандартний
+        zh_CN: 标准
+        zh_TW: 標準
+      description:
+        bg: Стандартна система
+        ca: Sistema estàndard
+        cs: Standardní systém
+        de: Standardsystem
+        el: Τυπικό σύστημα
+        es: Sistema estándar
+        fi: Tavallinen järjestelmä
+        fr: Système standard
+        id: Sistem standar
+        it: Sistema standard
+        ja: 標準システム
+        ka: სტანდარტული სისტემა
+        kab: Anagraw n tizeɣt
+        pl: Standardowy system
+        pt_BR: Sistema padrão
+        ru: Стандартная система
+        sk: Štandardný systém
+        sv: Standard system
+        tr: Standart sistem
+        uk: Стандартна система
+        zh_CN: 标准系统
+        zh_TW: 標準系統
 desktop_selection: optional
 software:
   installation_repositories: []
@@ -124,7 +170,6 @@ software:
   kernel: kernel-nvidia
   mandatory_patterns:
     - bootloader
-    - enhanced_base
   optional_patterns: [] # no optional pattern shared
   user_patterns:
     - cockpit
@@ -151,7 +196,6 @@ software:
     - oracle_server
     - print_server
   mandatory_packages:
-    - SLES_NVIDIA-release
     - kernel-firmware-nvidia
     - NetworkManager
     # bsc#1241224, bsc#1224868 avoid probe DHCP over all ethernet devices and ignore carrier
@@ -160,77 +204,177 @@ software:
   optional_packages: []
   base_product: SLES_NVIDIA
 
-storage:
-  space_policy: delete
-  volumes:
-    - "/"
-    - "swap"
-  volume_templates:
-    - mount_path: "/"
-      filesystem: btrfs
-      btrfs:
-        snapshots: true
-        read_only: false
-        default_subvolume: "@"
-        subvolumes:
-          - path: home
-          - path: opt
-          - path: root
-          - path: srv
-          - path: usr/local
-          # Unified var subvolume - https://lists.opensuse.org/opensuse-packaging/2017-11/msg00017.html
-          - path: var
-            copy_on_write: false
-      size:
-        auto: true
-      outline:
-        required: true
-        filesystems:
-          - btrfs
-          - ext2
-          - ext3
-          - ext4
-          - xfs
-        auto_size:
-          base_min: 5 GiB
-          base_max: 15 GiB
-          snapshots_increment: 150%
-          max_fallback_for:
-            - "/home"
-        snapshots_configurable: true
-    - mount_path: "swap"
-      filesystem: swap
-      size:
-        min: 1 GiB
-        max: 2 GiB
-      outline:
-        required: false
-        filesystems:
-          - swap
-    - mount_path: "/home"
-      filesystem: xfs
-      size:
-        auto: false
-        min: 5 GiB
-        max: unlimited
-      outline:
-        required: false
-        filesystems:
-          - btrfs
-          - ext2
-          - ext3
-          - ext4
-          - xfs
-    - filesystem: xfs
-      size:
-        auto: false
-        min: 512 MiB
-      outline:
-        required: false
-        filesystems:
-          - btrfs
-          - ext2
-          - ext3
-          - ext4
-          - xfs
-          - vfat
+modes:
+  - id: standard
+    # ------------------------------------------------------------------------------
+    # WARNING: When changing the mode name or description delete the translations
+    # located at the translations/mode/<id> key above to avoid using obsolete
+    # translations!!
+    # ------------------------------------------------------------------------------
+    name: Standard
+    description: Standard system
+
+    software:
+      mandatory_patterns:
+        - enhanced_base
+      mandatory_packages:
+        - SLES_NVIDIA-release
+
+    storage:
+      space_policy: delete
+      volumes:
+        - "/"
+        - "swap"
+      volume_templates:
+        - mount_path: "/"
+          filesystem: btrfs
+          btrfs:
+            snapshots: true
+            read_only: false
+            default_subvolume: "@"
+            subvolumes:
+              - path: home
+              - path: opt
+              - path: root
+              - path: srv
+              - path: usr/local
+              # Unified var subvolume - https://lists.opensuse.org/opensuse-packaging/2017-11/msg00017.html
+              - path: var
+                copy_on_write: false
+          size:
+            auto: true
+          outline:
+            required: true
+            filesystems:
+              - btrfs
+              - ext2
+              - ext3
+              - ext4
+              - xfs
+            auto_size:
+              base_min: 5 GiB
+              base_max: 15 GiB
+              snapshots_increment: 150%
+              max_fallback_for:
+                - "/home"
+            snapshots_configurable: true
+        - mount_path: "swap"
+          filesystem: swap
+          size:
+            min: 1 GiB
+            max: 2 GiB
+          outline:
+            required: false
+            filesystems:
+              - swap
+        - mount_path: "/home"
+          filesystem: xfs
+          size:
+            auto: false
+            min: 5 GiB
+            max: unlimited
+          outline:
+            required: false
+            filesystems:
+              - btrfs
+              - ext2
+              - ext3
+              - ext4
+              - xfs
+        - filesystem: xfs
+          size:
+            auto: false
+            min: 512 MiB
+          outline:
+            required: false
+            filesystems:
+              - btrfs
+              - ext2
+              - ext3
+              - ext4
+              - xfs
+              - vfat
+
+  - id: immutable
+    # ------------------------------------------------------------------------------
+    # WARNING: When changing the mode name or description delete the translations
+    # located at the translations/mode/<id> key above to avoid using obsolete
+    # translations!!
+    # ------------------------------------------------------------------------------
+    name: Immutable
+    description: Immutable system with atomic updates
+
+    software:
+      mandatory_patterns:
+        - immutable_base
+      mandatory_packages:
+        - SLES_NVIDIA_immutable-release
+      user_patterns:
+        - name: enhanced_base
+          selected: true
+
+    storage:
+      space_policy: delete
+      volumes:
+        - "/"
+        - "/var"
+      volume_templates:
+        - mount_path: "/"
+          filesystem: btrfs
+          btrfs:
+            snapshots: true
+            read_only: true
+            default_subvolume: "@"
+            subvolumes:
+              - path: home
+              - path: opt
+              - path: root
+              - path: srv
+              - path: usr/local
+              - path: boot/writable
+              # Unified var subvolume - https://lists.opensuse.org/opensuse-packaging/2017-11/msg00017.html
+              - path: var
+                copy_on_write: false
+              # Architecture specific subvolumes
+              - path: boot/grub2/arm64-efi
+                archs: aarch64
+              - path: boot/grub2/x86_64-efi
+                archs: x86_64
+          size:
+            auto: true
+          outline:
+            required: true
+            snapshots_configurable: false
+            filesystems:
+              - btrfs
+            auto_size:
+              base_min: 5 GiB
+              base_max: 25 GiB
+              max_fallback_for:
+                - "/var"
+        - mount_path: "/var"
+          filesystem: btrfs
+          mount_options:
+            - "x-initrd.mount"
+            - "nodatacow"
+          size:
+            auto: false
+            min: 5 GiB
+          outline:
+            required: false
+            filesystems:
+              - btrfs
+        - filesystem: xfs
+          size:
+            auto: false
+            min: 512 MiB
+          outline:
+            required: false
+            filesystems:
+              - btrfs
+              - ext2
+              - ext3
+              - ext4
+              - xfs
+              - vfat
+              - swap
